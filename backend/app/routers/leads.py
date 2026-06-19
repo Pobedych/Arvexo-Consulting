@@ -15,7 +15,9 @@ router = APIRouter(prefix="/api", tags=["leads"])
 
 
 @router.post("/leads", response_model=LeadResponse)
-async def create_lead(payload: LeadCreate, request: Request, session: AsyncSession = Depends(get_session)) -> LeadResponse:
+async def create_lead(
+    payload: LeadCreate, request: Request, session: AsyncSession = Depends(get_session)
+) -> LeadResponse:
     if payload.website:
         return LeadResponse(ok=True, message="Lead received")
 

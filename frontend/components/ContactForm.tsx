@@ -15,7 +15,7 @@ const initialData: LeadFormData = {
   task: "",
   budget: "Пока не знаю",
   website: "",
-  privacyConsent: false
+  privacyConsent: false,
 };
 
 export function ContactForm() {
@@ -57,14 +57,18 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-[28px] border border-line bg-white p-6 shadow-soft sm:p-8" noValidate>
-      <div className="grid gap-5 sm:grid-cols-2">
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-card2 border border-hairline bg-surface p-6 shadow-panel sm:p-8"
+      noValidate
+    >
+      <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Имя" htmlFor="name" error={errors.name}>
           <input
             id="name"
             name="name"
             value={data.name}
-            onChange={(event) => updateField("name", event.target.value)}
+            onChange={(e) => updateField("name", e.target.value)}
             className="field"
             autoComplete="name"
             required
@@ -75,7 +79,7 @@ export function ContactForm() {
             id="contact"
             name="contact"
             value={data.contact}
-            onChange={(event) => updateField("contact", event.target.value)}
+            onChange={(e) => updateField("contact", e.target.value)}
             className="field"
             autoComplete="email"
             placeholder="Telegram, телефон или email"
@@ -87,7 +91,7 @@ export function ContactForm() {
             id="company"
             name="company"
             value={data.company}
-            onChange={(event) => updateField("company", event.target.value)}
+            onChange={(e) => updateField("company", e.target.value)}
             className="field"
             autoComplete="organization"
           />
@@ -97,29 +101,23 @@ export function ContactForm() {
             <input type="hidden" id="budget" name="budget" value={data.budget} />
             <button
               type="button"
-              className={`field flex min-h-[54px] items-center justify-between gap-3 text-left ${
-                budgetOpen ? "border-accent shadow-[0_0_0_3px_rgba(29,78,216,0.14)]" : ""
-              }`}
+              className={`field flex min-h-[52px] w-full items-center justify-between gap-3 text-left ${budgetOpen ? "field-focus" : ""}`}
               aria-haspopup="listbox"
               aria-expanded={budgetOpen}
               aria-labelledby="budget-label"
-              onClick={() => setBudgetOpen((value) => !value)}
-              onKeyDown={(event) => {
-                if (event.key === "Escape") {
-                  setBudgetOpen(false);
-                }
-              }}
+              onClick={() => setBudgetOpen((v) => !v)}
+              onKeyDown={(e) => { if (e.key === "Escape") setBudgetOpen(false); }}
             >
-              <span>{data.budget}</span>
+              <span className="text-sm">{data.budget}</span>
               <ChevronDown
-                size={18}
-                className={`shrink-0 text-muted transition ${budgetOpen ? "rotate-180 text-accent" : ""}`}
+                size={16}
+                className={`shrink-0 text-faint transition duration-200 ${budgetOpen ? "rotate-180 text-accent" : ""}`}
                 aria-hidden="true"
               />
             </button>
             {budgetOpen ? (
               <div
-                className="absolute left-0 right-0 top-[calc(100%+8px)] z-20 overflow-hidden rounded-[20px] border border-blue-100 bg-white p-2 shadow-soft"
+                className="absolute left-0 right-0 top-[calc(100%+6px)] z-20 overflow-hidden rounded-card2 border border-hairline bg-surface p-1.5 shadow-panel"
                 role="listbox"
                 aria-label="Бюджет"
               >
@@ -131,16 +129,13 @@ export function ContactForm() {
                       type="button"
                       role="option"
                       aria-selected={selected}
-                      className={`focus-ring flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${
-                        selected ? "bg-blue-50 text-accent" : "text-ink hover:bg-paper"
+                      className={`focus-ring flex w-full items-center justify-between gap-3 rounded-card px-4 py-2.5 text-left text-sm font-medium transition duration-150 ${
+                        selected ? "bg-accent/8 text-accent" : "text-ink hover:bg-bg"
                       }`}
-                      onClick={() => {
-                        updateField("budget", option);
-                        setBudgetOpen(false);
-                      }}
+                      onClick={() => { updateField("budget", option); setBudgetOpen(false); }}
                     >
                       <span>{option}</span>
-                      {selected ? <Check size={17} aria-hidden="true" /> : null}
+                      {selected ? <Check size={15} aria-hidden="true" /> : null}
                     </button>
                   );
                 })}
@@ -156,30 +151,30 @@ export function ContactForm() {
           id="website"
           name="website"
           value={data.website}
-          onChange={(event) => updateField("website", event.target.value)}
+          onChange={(e) => updateField("website", e.target.value)}
           tabIndex={-1}
           autoComplete="off"
         />
       </div>
 
-      <Field label="Задача" htmlFor="task" error={errors.task} className="mt-5">
+      <Field label="Задача" htmlFor="task" error={errors.task} className="mt-4">
         <textarea
           id="task"
           name="task"
           value={data.task}
-          onChange={(event) => updateField("task", event.target.value)}
+          onChange={(e) => updateField("task", e.target.value)}
           className="field min-h-36 resize-y"
           placeholder="Например: хотим автоматизировать заявки из Telegram и сайта, передавать данные в CRM и быстрее отвечать клиентам."
           required
         />
       </Field>
 
-      <label className="mt-5 flex items-start gap-3 text-sm leading-6 text-muted">
+      <label className="mt-4 flex items-start gap-3 text-sm leading-6 text-muted">
         <input
           type="checkbox"
           checked={data.privacyConsent}
-          onChange={(event) => updateField("privacyConsent", event.target.checked)}
-          className="mt-1 h-4 w-4 rounded border-line text-accent focus:ring-accent"
+          onChange={(e) => updateField("privacyConsent", e.target.checked)}
+          className="mt-0.5 h-4 w-4 rounded border-hairline-md accent-accent"
           required
         />
         <span>
@@ -188,35 +183,42 @@ export function ContactForm() {
             политику конфиденциальности
           </Link>
           .
-          {errors.privacyConsent ? <span className="mt-1 block text-red-600">{errors.privacyConsent}</span> : null}
+          {errors.privacyConsent ? (
+            <span className="mt-1 block text-red-600">{errors.privacyConsent}</span>
+          ) : null}
         </span>
       </label>
 
-      <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center">
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
         <NativeButton type="submit" disabled={status === "loading" || !data.privacyConsent}>
           {status === "loading" ? "Отправляем..." : "Получить консультацию"}
         </NativeButton>
         {message ? (
-          <p className={`text-sm font-medium ${status === "success" ? "text-green-700" : "text-red-600"}`} role="status">
+          <p
+            className={`text-sm font-medium ${status === "success" ? "text-success" : "text-red-600"}`}
+            role="status"
+          >
             {message}
           </p>
         ) : null}
       </div>
+
       <style jsx>{`
         .field {
           width: 100%;
-          border-radius: 18px;
-          border: 1px solid #e5e7eb;
-          background: #fafaf7;
-          padding: 0.875rem 1rem;
-          color: #111111;
+          border-radius: 12px;
+          border: 1px solid rgba(20,19,15,.12);
+          background: #fff;
+          padding: 0.8rem 1rem;
+          font-size: 0.875rem;
+          color: #14130F;
           outline: none;
           transition: border-color 150ms ease, box-shadow 150ms ease;
         }
-
-        .field:focus {
-          border-color: #1d4ed8;
-          box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.14);
+        .field:focus,
+        .field-focus {
+          border-color: #E5402C;
+          box-shadow: 0 0 0 3px rgba(229,64,44,0.12);
         }
       `}</style>
     </form>
@@ -228,7 +230,7 @@ function Field({
   htmlFor,
   error,
   className = "",
-  children
+  children,
 }: {
   label: string;
   htmlFor: string;
@@ -242,7 +244,7 @@ function Field({
         {label}
       </label>
       {children}
-      {error ? <p className="mt-2 text-sm text-red-600">{error}</p> : null}
+      {error ? <p className="mt-1.5 text-sm text-red-600">{error}</p> : null}
     </div>
   );
 }

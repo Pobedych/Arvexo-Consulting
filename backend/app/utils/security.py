@@ -24,12 +24,12 @@ def _is_trusted_proxy(ip: str) -> bool:
         return False
 
     for network in settings.trusted_proxy_ip_list:
-      try:
-          if address in ipaddress.ip_network(network, strict=False):
-              return True
-      except ValueError:
-          if ip == network:
-              return True
+        try:
+            if address in ipaddress.ip_network(network, strict=False):
+                return True
+        except ValueError:
+            if ip == network:
+                return True
     return False
 
 

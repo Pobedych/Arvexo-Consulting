@@ -25,12 +25,10 @@ import {
 } from "lucide-react";
 
 export const navItems = [
-  { label: "Задачи", href: "#problems" },
   { label: "Услуги", href: "#services" },
-  { label: "AI-агенты", href: "#agents" },
-  { label: "Как работаем", href: "#process" },
-  { label: "Решения", href: "#solutions" },
-  { label: "FAQ", href: "#faq" }
+  { label: "Сценарии", href: "#solutions" },
+  { label: "Процесс", href: "#process" },
+  { label: "FAQ", href: "#faq" },
 ];
 
 export const heroWorkflow = [

@@ -8,13 +8,13 @@ type BaseProps = {
 };
 
 const variants = {
-  primary: "bg-accent text-white shadow-[0_14px_36px_rgba(29,78,216,0.22)] hover:bg-blue-700",
-  secondary: "border border-line bg-white text-ink hover:border-accent/30 hover:bg-blue-50",
-  ghost: "text-muted hover:bg-white hover:text-ink"
+  primary:   "bg-ink text-surface hover:bg-accent",
+  secondary: "border border-hairline-md bg-surface text-ink hover:border-accent/40 hover:bg-white",
+  ghost:     "text-muted hover:text-ink hover:bg-surface",
 };
 
 const baseClass =
-  "focus-ring inline-flex min-h-11 items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition";
+  "focus-ring inline-flex min-h-11 items-center justify-center rounded-pill px-6 py-3 text-sm font-semibold transition duration-200";
 
 type LinkButtonProps = BaseProps &
   AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -33,7 +33,10 @@ export function Button({ children, variant = "primary", className = "", href, ..
 
 export function NativeButton({ children, variant = "primary", className = "", ...props }: NativeButtonProps) {
   return (
-    <button className={`${baseClass} ${variants[variant]} disabled:cursor-not-allowed disabled:opacity-55 ${className}`} {...props}>
+    <button
+      className={`${baseClass} ${variants[variant]} disabled:cursor-not-allowed disabled:opacity-40 ${className}`}
+      {...props}
+    >
       {children}
     </button>
   );

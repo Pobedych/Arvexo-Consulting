@@ -5,21 +5,35 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        canvas: "#FAFAF7",
-        paper: "#F7F5F0",
-        ink: "#111111",
-        muted: "#5F6368",
-        line: "#E5E7EB",
-        accent: "#1D4ED8",
-        indigo: "#4F46E5"
+        bg:          "#EEEBE3",
+        surface:     "#FBFAF7",
+        "surface-alt": "#E6E2D8",
+        ink:         "#14130F",
+        "ink-2":     "#1A1814",
+        muted:       "#57534B",
+        faint:       "#8A857B",
+        hairline:    "rgba(20,19,15,0.10)",
+        "hairline-md": "rgba(20,19,15,0.14)",
+        accent:      "#E5402C",
+        success:     "#1FB46A",
+      },
+      fontFamily: {
+        onest:     ["var(--font-onest)", "ui-sans-serif", "system-ui", "sans-serif"],
+        cormorant: ["var(--font-cormorant)", "ui-serif", "Georgia", "serif"],
+        mono:      ["var(--font-mono)", "ui-monospace", "monospace"],
+      },
+      borderRadius: {
+        pill:  "100px",
+        card:  "16px",
+        card2: "22px",
       },
       boxShadow: {
-        soft: "0 24px 80px rgba(17, 17, 17, 0.08)",
-        card: "0 16px 48px rgba(17, 17, 17, 0.06)"
-      }
-    }
+        panel: "0 30px 64px -32px rgba(20,19,15,0.28)",
+        soft:  "0 8px 32px rgba(20,19,15,0.08)",
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 };
 
 export default config;

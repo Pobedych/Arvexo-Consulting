@@ -3,45 +3,92 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
-  --header-height: 76px;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: #fafaf7;
-  color: #111111;
-  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --bg:              #EEEBE3;
+  --surface:         #FBFAF7;
+  --surface-alt:     #E6E2D8;
+  --ink:             #14130F;
+  --ink-2:           #1A1814;
+  --text-muted:      #57534B;
+  --text-faint:      #8A857B;
+  --hairline:        rgba(20,19,15,.10);
+  --hairline-md:     rgba(20,19,15,.14);
+  --accent:          #E5402C;
+  --success:         #1FB46A;
+  --white:           #FFFFFF;
+  --header-height:   72px;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-onest), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
 ::selection {
-  background: rgba(29, 78, 216, 0.16);
+  background: var(--ink);
+  color: var(--bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+section {
+  scroll-margin-top: var(--header-height);
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #A39E93;
 }
 
 .section-shell {
-  @apply mx-auto w-full max-w-[1200px] px-5 sm:px-6 lg:px-8;
+  @apply mx-auto w-full max-w-[1200px] px-5 sm:px-8 lg:px-9;
 }
 
 .focus-ring {
   @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+.mono-label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
 
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
 }
