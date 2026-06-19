@@ -11,7 +11,22 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+*.egg-info/
+dist/
+build/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
 *.log
 .idea/
+.vscode/
 .DS_Store
+
+*.pem
+*.key
+*.cert
+*.crt
+
+CLAUDE.md
