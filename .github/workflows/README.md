@@ -33,6 +33,7 @@ Go to **Settings → Secrets and variables → Actions** and add:
 ## GitHub Environment
 
 Create a **`production`** environment in **Settings → Environments**:
+
 - Add protection rules (optional: require reviewer before deploy)
 - Environment URL: `https://ai.arvexo.ru`
 
