@@ -237,9 +237,13 @@ jobs:
           REMOTE
 
       - name: Health check
+        env:
+          HOST: ${{ secrets.SSH_HOST }}
+          USER: ${{ secrets.SSH_USER }}
+          PORT: ${{ secrets.SSH_PORT || 22 }}
         run: |
-          sleep 5
-          STATUS=$(curl -sf -o /dev/null -w "%{http_code}" https://ai.arvexo.ru/health || echo "000")
+          STATUS=$(ssh -p "$PORT" "$USER@$HOST" \
+            "curl -sf -o /dev/null -w '%{http_code}' http://localhost:8000/health || echo 000")
           echo "Health endpoint returned: $STATUS"
           if [ "$STATUS" != "200" ]; then
             echo "::error::Health check failed — got HTTP $STATUS"
