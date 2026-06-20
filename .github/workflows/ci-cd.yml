@@ -208,7 +208,7 @@ jobs:
           PORT:        ${{ secrets.SSH_PORT || 22 }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          ssh -p "$PORT" "$USER@$HOST" bash -s << 'REMOTE'
+          ssh -p "$PORT" "$USER@$HOST" env DEPLOY_PATH="$DEPLOY_PATH" bash -s << 'REMOTE'
             set -euo pipefail
 
             cd "$DEPLOY_PATH"
