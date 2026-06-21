@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Button } from "@/components/Button";
 import { MobileMenu } from "@/components/MobileMenu";
+import { HeaderAuth } from "@/components/HeaderAuth";
 import { navItems } from "@/data/siteContent";
 
 export function Header() {
@@ -24,14 +24,8 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
-          <Link
-            href="https://account.arvexo.ru"
-            className="focus-ring rounded-pill px-4 py-2 text-sm font-medium text-muted transition duration-200 hover:text-ink"
-          >
-            Войти
-          </Link>
-          <Button href="#contact">Обсудить проект</Button>
+        <div className="hidden items-center lg:flex">
+          <HeaderAuth />
         </div>
 
         <MobileMenu />

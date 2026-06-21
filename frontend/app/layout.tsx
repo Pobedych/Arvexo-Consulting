@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant, JetBrains_Mono, Onest } from "next/font/google";
+import { AuthProvider } from "@/components/AuthProvider";
 import "./globals.css";
 
 const onest = Onest({
@@ -42,7 +43,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="ru">
       <body className={`${onest.variable} ${cormorant.variable} ${jetbrainsMono.variable}`}>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

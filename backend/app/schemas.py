@@ -36,3 +36,11 @@ class LeadResponse(BaseModel):
     ok: bool
     message: str | None = None
     detail: str | None = None
+
+
+class LeadListItem(BaseModel):
+    id: str
+    task: str
+    budget: str | None
+    created_at: str
+    telegram_status: str

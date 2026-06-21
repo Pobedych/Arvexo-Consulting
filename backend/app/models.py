@@ -19,6 +19,7 @@ class Lead(Base):
     company: Mapped[str | None] = mapped_column(String(150), nullable=True)
     task: Mapped[str] = mapped_column(Text, nullable=False)
     budget: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    arvexo_account_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
     source: Mapped[str] = mapped_column(String(100), nullable=False, default="ai.arvexo.ru")
     ip_address: Mapped[str | None] = mapped_column(String(100), nullable=True)
     user_agent: Mapped[str | None] = mapped_column(Text, nullable=True)
