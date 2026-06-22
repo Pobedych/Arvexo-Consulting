@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ExternalLink, FileText, LogOut, User } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { AccountAvatar } from "@/components/account/AccountAvatar";
+import { LeadTimeline } from "@/components/account/LeadTimeline";
 import { StatusBadge } from "@/components/account/StatusBadge";
 import { buildSSOLoginUrl, getMyLeads, logout, type LeadListItem } from "@/lib/auth";
 
@@ -46,6 +47,11 @@ function UnauthenticatedView() {
 
 // ─── Lead card ────────────────────────────────────────────────────────────────
 
+const URGENCY_LABELS: Record<string, string> = {
+  urgent:   "🔴 Срочно",
+  standard: "Стандартно",
+};
+
 function LeadCard({ lead }: { lead: LeadListItem }) {
   return (
     <div className="rounded-card2 border border-hairline bg-surface p-5 transition hover:border-hairline-md">
@@ -53,12 +59,25 @@ function LeadCard({ lead }: { lead: LeadListItem }) {
         <p className="flex-1 text-sm font-medium leading-6 text-ink line-clamp-2">{lead.task}</p>
         <StatusBadge status={lead.status} />
       </div>
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted">
+
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
         <span>{formatDate(lead.created_at)}</span>
         {lead.budget && (
           <span className="rounded-pill bg-surface-alt px-2 py-0.5 font-medium text-ink">{lead.budget}</span>
         )}
+        {lead.service_type && (
+          <span className="rounded-pill bg-surface-alt px-2 py-0.5 font-medium text-ink">{lead.service_type}</span>
+        )}
+        {lead.urgency && URGENCY_LABELS[lead.urgency] && (
+          <span className="text-muted">{URGENCY_LABELS[lead.urgency]}</span>
+        )}
       </div>
+
+      <LeadTimeline
+        status={lead.status}
+        createdAt={lead.created_at}
+        statusUpdatedAt={lead.status_updated_at}
+      />
     </div>
   );
 }

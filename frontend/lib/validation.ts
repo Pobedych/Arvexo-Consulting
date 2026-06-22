@@ -1,9 +1,20 @@
+export type ServiceType =
+  | "AI-аудит"
+  | "Telegram-бот"
+  | "AI-ассистент"
+  | "Интеграции с CRM"
+  | "Другое";
+
+export type UrgencyValue = "standard" | "urgent";
+
 export type LeadFormData = {
   name: string;
   contact: string;
   company: string;
   task: string;
   budget: string;
+  serviceType: ServiceType | "";
+  urgency: UrgencyValue | "";
   website: string;
   privacyConsent: boolean;
 };

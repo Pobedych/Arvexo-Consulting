@@ -11,8 +11,11 @@ export type LeadListItem = {
   id: string;
   task: string;
   budget: string | null;
+  service_type: string | null;
+  urgency: string | null;
   created_at: string;
   status: LeadStatus;
+  status_updated_at: string | null;
   telegram_status: string;
 };
 
@@ -47,7 +50,11 @@ export type AdminLeadItem = {
   company: string | null;
   task: string;
   budget: string | null;
+  service_type: string | null;
+  urgency: string | null;
   status: LeadStatus;
+  status_updated_at: string | null;
+  admin_notes: string | null;
   telegram_status: string;
   arvexo_account_id: string | null;
   created_at: string;
@@ -64,6 +71,20 @@ export async function getAdminLeads(): Promise<AdminLeadItem[] | null> {
     return res.json();
   } catch {
     return null;
+  }
+}
+
+export async function updateLeadNotes(id: string, notes: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${getApiBase()}/api/admin/leads/${id}/notes`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ notes }),
+    });
+    return res.ok;
+  } catch {
+    return false;
   }
 }
 

@@ -5,12 +5,25 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 BudgetValue = Literal["Пока не знаю", "До 50 000 ₽", "50 000–150 000 ₽", "150 000–300 000 ₽", "300 000 ₽+"]
 
 
+ServiceType = Literal[
+    "AI-аудит",
+    "Telegram-бот",
+    "AI-ассистент",
+    "Интеграции с CRM",
+    "Другое",
+]
+
+UrgencyValue = Literal["standard", "urgent"]
+
+
 class LeadCreate(BaseModel):
     name: str = Field(min_length=2, max_length=100)
     contact: str = Field(min_length=3, max_length=150)
     company: str | None = Field(default=None, max_length=150)
     task: str = Field(min_length=10, max_length=3000)
     budget: BudgetValue | None = None
+    service_type: ServiceType | None = Field(default=None, alias="serviceType")
+    urgency: UrgencyValue | None = None
     website: str | None = Field(default=None, max_length=200)
     privacy_consent: bool = Field(alias="privacyConsent")
 
@@ -46,12 +59,19 @@ class LeadStatusUpdate(BaseModel):
     status: LeadStatus
 
 
+class AdminNotesUpdate(BaseModel):
+    notes: str = Field(max_length=2000)
+
+
 class LeadListItem(BaseModel):
     id: str
     task: str
     budget: str | None
+    service_type: str | None
+    urgency: str | None
     created_at: str
     status: str
+    status_updated_at: str | None
     telegram_status: str
 
 
@@ -62,7 +82,11 @@ class AdminLeadItem(BaseModel):
     company: str | None
     task: str
     budget: str | None
+    service_type: str | None
+    urgency: str | None
     status: str
+    status_updated_at: str | None
+    admin_notes: str | None
     telegram_status: str
     arvexo_account_id: str | None
     created_at: str

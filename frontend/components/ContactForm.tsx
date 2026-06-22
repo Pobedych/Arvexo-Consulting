@@ -1,12 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { NativeButton } from "@/components/Button";
 import { budgetOptions } from "@/data/siteContent";
 import { submitLead } from "@/lib/api";
-import { type LeadFormData, type LeadFormErrors, validateLeadForm } from "@/lib/validation";
+import { type LeadFormData, type LeadFormErrors, type ServiceType, validateLeadForm } from "@/lib/validation";
+
+const SERVICE_TYPES: ServiceType[] = [
+  "AI-аудит",
+  "Telegram-бот",
+  "AI-ассистент",
+  "Интеграции с CRM",
+  "Другое",
+];
 
 const initialData: LeadFormData = {
   name: "",
@@ -14,14 +23,17 @@ const initialData: LeadFormData = {
   company: "",
   task: "",
   budget: "Пока не знаю",
+  serviceType: "",
+  urgency: "",
   website: "",
   privacyConsent: false,
 };
 
 export function ContactForm() {
+  const router = useRouter();
   const [data, setData] = useState<LeadFormData>(initialData);
   const [errors, setErrors] = useState<LeadFormErrors>({});
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [message, setMessage] = useState("");
   const [budgetOpen, setBudgetOpen] = useState(false);
 
@@ -46,9 +58,7 @@ export function ContactForm() {
     const result = await submitLead(data);
 
     if (result.ok) {
-      setStatus("success");
-      setMessage("Заявка отправлена. Мы свяжемся с вами после обработки.");
-      setData(initialData);
+      router.push("/thank-you");
       return;
     }
 
@@ -145,6 +155,57 @@ export function ContactForm() {
         </Field>
       </div>
 
+      {/* Service type chips */}
+      <div className="mt-4">
+        <p className="mb-2 text-sm font-semibold text-ink">Тип задачи</p>
+        <div className="flex flex-wrap gap-2">
+          {SERVICE_TYPES.map((type) => {
+            const selected = data.serviceType === type;
+            return (
+              <button
+                key={type}
+                type="button"
+                onClick={() => updateField("serviceType", selected ? "" : type)}
+                className={`rounded-pill border px-3 py-1.5 text-sm font-medium transition duration-150 ${
+                  selected
+                    ? "border-accent bg-accent/8 text-accent"
+                    : "border-hairline bg-bg text-muted hover:border-hairline-md hover:text-ink"
+                }`}
+              >
+                {type}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Urgency */}
+      <div className="mt-4">
+        <p className="mb-2 text-sm font-semibold text-ink">Срочность</p>
+        <div className="flex gap-2">
+          {([
+            { value: "standard", label: "Стандартно (2–4 нед.)" },
+            { value: "urgent",   label: "Срочно (до 1 нед.)" },
+          ] as const).map(({ value, label }) => {
+            const selected = data.urgency === value;
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => updateField("urgency", selected ? "" : value)}
+                className={`rounded-pill border px-3 py-1.5 text-sm font-medium transition duration-150 ${
+                  selected
+                    ? "border-accent bg-accent/8 text-accent"
+                    : "border-hairline bg-bg text-muted hover:border-hairline-md hover:text-ink"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="hidden" aria-hidden="true">
         <label htmlFor="website">Website</label>
         <input
@@ -194,10 +255,7 @@ export function ContactForm() {
           {status === "loading" ? "Отправляем..." : "Получить консультацию"}
         </NativeButton>
         {message ? (
-          <p
-            className={`text-sm font-medium ${status === "success" ? "text-success" : "text-red-600"}`}
-            role="status"
-          >
+          <p className="text-sm font-medium text-red-600" role="status">
             {message}
           </p>
         ) : null}

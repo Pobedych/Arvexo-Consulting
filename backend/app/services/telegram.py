@@ -17,14 +17,21 @@ async def send_lead_to_telegram(lead: LeadCreate) -> tuple[bool, str | None]:
         return False, "Telegram credentials are not configured"
 
     task = truncate_text(lead.task)
-    message = (
-        "🚀 <b>Новая заявка с ai.arvexo.ru</b>\n\n"
-        f"Имя: {escape_html(lead.name)}\n"
-        f"Контакт: {escape_html(lead.contact)}\n"
-        f"Компания: {escape_html(lead.company or 'Не указана')}\n"
-        f"Бюджет: {escape_html(lead.budget or 'Не указан')}\n\n"
-        f"<b>Задача:</b>\n{escape_html(task)}"
-    )
+    urgency_label = {"urgent": "🔴 Срочно", "standard": "🟢 Стандартно"}.get(lead.urgency or "", "")
+    lines = [
+        "🚀 <b>Новая заявка с ai.arvexo.ru</b>",
+        "",
+        f"Имя: {escape_html(lead.name)}",
+        f"Контакт: {escape_html(lead.contact)}",
+        f"Компания: {escape_html(lead.company or 'Не указана')}",
+        f"Бюджет: {escape_html(lead.budget or 'Не указан')}",
+    ]
+    if lead.service_type:
+        lines.append(f"Тип: {escape_html(lead.service_type)}")
+    if urgency_label:
+        lines.append(f"Срочность: {urgency_label}")
+    lines += ["", "<b>Задача:</b>", escape_html(task)]
+    message = "\n".join(lines)
 
     bot: Bot | None = None
     try:
