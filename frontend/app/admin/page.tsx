@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { StatusBadge } from "@/components/account/StatusBadge";
+import { StatusSelect } from "@/components/account/StatusSelect";
 import {
   type AdminLeadItem,
   type LeadStatus,
@@ -19,14 +20,6 @@ const STATUSES: { value: LeadStatus | "all"; label: string }[] = [
   { value: "in_progress", label: "В работе" },
   { value: "done",        label: "Выполнено" },
   { value: "rejected",    label: "Отклонено" },
-];
-
-const STATUS_OPTIONS: { value: LeadStatus; label: string }[] = [
-  { value: "new",         label: "Новая" },
-  { value: "contacted",   label: "Связались" },
-  { value: "in_progress", label: "В работе" },
-  { value: "done",        label: "Выполнена" },
-  { value: "rejected",    label: "Отклонена" },
 ];
 
 function formatDate(iso: string) {
@@ -101,7 +94,7 @@ export default function AdminPage() {
       <div className="section-shell py-6">
         {/* Stats row */}
         <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-5">
-          {STATUS_OPTIONS.map(({ value, label }) => (
+          {STATUSES.filter((s) => s.value !== "all").map(({ value, label }) => (
             <button
               key={value}
               type="button"
@@ -185,20 +178,11 @@ export default function AdminPage() {
 
                   {/* Right: status selector */}
                   <div className="shrink-0">
-                    <select
-                      value={lead.status}
+                    <StatusSelect
+                      value={lead.status as LeadStatus}
                       disabled={updating === lead.id}
-                      onChange={(e) =>
-                        handleStatusChange(lead.id, e.target.value as LeadStatus)
-                      }
-                      className="rounded-card border border-hairline bg-bg px-3 py-2 text-sm text-ink transition hover:border-hairline-md focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-50"
-                    >
-                      {STATUS_OPTIONS.map(({ value, label }) => (
-                        <option key={value} value={value}>
-                          {label}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(status) => handleStatusChange(lead.id, status)}
+                    />
                   </div>
                 </div>
               </div>
