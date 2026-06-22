@@ -74,12 +74,14 @@ async def auth_me(
         raise HTTPException(status_code=401, detail="Session expired") from exc
     except jwt.InvalidTokenError as exc:
         raise HTTPException(status_code=401, detail="Invalid session") from exc
-    return JSONResponse({
-        "id": payload.get("sub"),
-        "email": payload.get("email"),
-        "name": payload.get("name"),
-        "avatar_url": payload.get("avatar_url"),
-    })
+    return JSONResponse(
+        {
+            "id": payload.get("sub"),
+            "email": payload.get("email"),
+            "name": payload.get("name"),
+            "avatar_url": payload.get("avatar_url"),
+        }
+    )
 
 
 @router.post("/logout")

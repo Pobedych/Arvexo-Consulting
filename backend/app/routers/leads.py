@@ -79,9 +79,7 @@ async def get_my_leads(
         raise HTTPException(status_code=401, detail="Not authenticated")
 
     result = await session.execute(
-        select(Lead)
-        .where(Lead.arvexo_account_id == account_id)
-        .order_by(Lead.created_at.desc())
+        select(Lead).where(Lead.arvexo_account_id == account_id).order_by(Lead.created_at.desc())
     )
     leads = result.scalars().all()
     return [
