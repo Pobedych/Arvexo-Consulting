@@ -40,6 +40,50 @@ export async function logout(): Promise<void> {
   });
 }
 
+export type AdminLeadItem = {
+  id: string;
+  name: string;
+  contact: string;
+  company: string | null;
+  task: string;
+  budget: string | null;
+  status: LeadStatus;
+  telegram_status: string;
+  arvexo_account_id: string | null;
+  created_at: string;
+};
+
+export async function getAdminLeads(): Promise<AdminLeadItem[] | null> {
+  try {
+    const res = await fetch(`${getApiBase()}/api/admin/leads`, {
+      credentials: "include",
+      cache: "no-store",
+    });
+    if (res.status === 403) return null;
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function updateLeadStatus(
+  id: string,
+  status: LeadStatus,
+): Promise<boolean> {
+  try {
+    const res = await fetch(`${getApiBase()}/api/leads/${id}/status`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 export async function getMyLeads(): Promise<LeadListItem[]> {
   const res = await fetch(`${getApiBase()}/api/account/leads`, {
     credentials: "include",

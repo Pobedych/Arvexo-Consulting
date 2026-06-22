@@ -53,3 +53,16 @@ class LeadListItem(BaseModel):
     created_at: str
     status: str
     telegram_status: str
+
+
+class AdminLeadItem(BaseModel):
+    id: str
+    name: str
+    contact: str
+    company: str | None
+    task: str
+    budget: str | None
+    status: str
+    telegram_status: str
+    arvexo_account_id: str | None
+    created_at: str

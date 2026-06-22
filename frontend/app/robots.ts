@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/account", "/api/"],
+      disallow: ["/account", "/admin", "/api/"],
     },
     sitemap: "https://ai.arvexo.ru/sitemap.xml",
   };
