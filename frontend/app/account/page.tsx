@@ -51,7 +51,7 @@ function LeadCard({ lead }: { lead: LeadListItem }) {
     <div className="rounded-card2 border border-hairline bg-surface p-5 transition hover:border-hairline-md">
       <div className="flex items-start justify-between gap-3">
         <p className="flex-1 text-sm font-medium leading-6 text-ink line-clamp-2">{lead.task}</p>
-        <StatusBadge status={lead.telegram_status} />
+        <StatusBadge status={lead.status} />
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted">
         <span>{formatDate(lead.created_at)}</span>

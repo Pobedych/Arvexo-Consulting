@@ -23,16 +23,39 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const TITLE = "Arvexo AI Consulting — AI-консалтинг и автоматизация бизнеса";
+const DESCRIPTION =
+  "Внедряем AI-решения для продаж, поддержки, аналитики и автоматизации бизнес-процессов: AI-аудит, Telegram-боты, ассистенты и CRM-интеграции.";
+const SITE_URL = "https://ai.arvexo.ru";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ai.arvexo.ru"),
-  title: "Arvexo AI Consulting — AI-консалтинг и автоматизация бизнеса",
-  description:
-    "Внедряем AI-решения для продаж, поддержки, аналитики и автоматизации бизнес-процессов: AI-аудит, боты, ассистенты и интеграции.",
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
   openGraph: {
-    title: "Arvexo AI Consulting",
-    description: "AI-консалтинг и автоматизация бизнес-процессов",
+    title: TITLE,
+    description: DESCRIPTION,
     type: "website",
-    url: "https://ai.arvexo.ru",
+    url: SITE_URL,
+    locale: "ru_RU",
+    siteName: "Arvexo AI Consulting",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Arvexo AI Consulting",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ["/og-image.png"],
+  },
+  alternates: {
+    canonical: SITE_URL,
   },
   icons: {
     icon: "/favicon.ico",

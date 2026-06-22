@@ -24,8 +24,13 @@ class Settings(BaseSettings):
     session_ttl_minutes: int = 60
     session_cookie_secure: bool = False
     frontend_url: str = "http://localhost:3000"
+    admin_account_ids: str = ""
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+
+    @property
+    def admin_account_id_list(self) -> list[str]:
+        return [item.strip() for item in self.admin_account_ids.split(",") if item.strip()]
 
     @property
     def cors_origin_list(self) -> list[str]:

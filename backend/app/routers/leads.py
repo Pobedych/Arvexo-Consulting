@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import get_settings
 from app.database import get_session
 from app.models import Lead
-from app.schemas import LeadCreate, LeadListItem, LeadResponse
+from app.schemas import LeadCreate, LeadListItem, LeadResponse, LeadStatusUpdate
 from app.services.telegram import send_lead_to_telegram
 from app.utils.rate_limit import check_rate_limit
 from app.utils.security import get_client_ip
@@ -88,7 +88,31 @@ async def get_my_leads(
             task=lead.task,
             budget=lead.budget,
             created_at=lead.created_at.isoformat(),
+            status=lead.status,
             telegram_status=lead.telegram_status,
         )
         for lead in leads
     ]
+
+
+@router.patch("/leads/{lead_id}/status", response_model=LeadResponse)
+async def update_lead_status(
+    lead_id: str,
+    body: LeadStatusUpdate,
+    consulting_session: str | None = Cookie(default=None),
+    session: AsyncSession = Depends(get_session),
+) -> LeadResponse:
+    account_id = _get_account_id_from_cookie(consulting_session)
+    if not account_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    if account_id not in settings.admin_account_id_list:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    result = await session.execute(select(Lead).where(Lead.id == lead_id))
+    lead = result.scalar_one_or_none()
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+
+    lead.status = body.status
+    await session.commit()
+    return LeadResponse(ok=True)

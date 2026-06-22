@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, get_args
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -38,9 +38,18 @@ class LeadResponse(BaseModel):
     detail: str | None = None
 
 
+LeadStatus = Literal["new", "contacted", "in_progress", "done", "rejected"]
+LEAD_STATUSES: list[str] = list(get_args(LeadStatus))
+
+
+class LeadStatusUpdate(BaseModel):
+    status: LeadStatus
+
+
 class LeadListItem(BaseModel):
     id: str
     task: str
     budget: str | None
     created_at: str
+    status: str
     telegram_status: str

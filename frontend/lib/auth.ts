@@ -5,11 +5,14 @@ export type AccountUser = {
   avatar_url: string | null;
 };
 
+export type LeadStatus = "new" | "contacted" | "in_progress" | "done" | "rejected";
+
 export type LeadListItem = {
   id: string;
   task: string;
   budget: string | null;
   created_at: string;
+  status: LeadStatus;
   telegram_status: string;
 };
 
