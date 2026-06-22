@@ -10,6 +10,7 @@ from app.config import get_settings
 from app.database import engine
 from app.routers.auth import router as auth_router
 from app.routers.leads import router as leads_router
+from app.routers.telegram_bot import router as telegram_router
 
 logging.basicConfig(level=logging.INFO)
 settings = get_settings()
@@ -20,12 +21,13 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+    allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
 app.include_router(auth_router)
 app.include_router(leads_router)
+app.include_router(telegram_router)
 
 
 @app.exception_handler(RequestValidationError)

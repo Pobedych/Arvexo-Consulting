@@ -10,7 +10,11 @@ from app.config import get_settings
 from app.database import get_session
 from app.models import Lead
 from app.schemas import AdminLeadItem, AdminNotesUpdate, LeadCreate, LeadListItem, LeadResponse, LeadStatusUpdate
-from app.services.telegram import send_lead_to_telegram, send_status_update_to_telegram
+from app.services.telegram import (
+    edit_lead_status_in_telegram,
+    send_lead_to_telegram,
+    send_status_fallback_to_telegram,
+)
 from app.utils.rate_limit import check_admin_rate_limit, check_rate_limit
 from app.utils.security import get_client_ip
 
@@ -102,9 +106,10 @@ async def create_lead(
     await session.commit()
     await session.refresh(lead)
 
-    sent, error = await send_lead_to_telegram(payload)
+    sent, error, message_id = await send_lead_to_telegram(payload, str(lead.id))
     lead.telegram_status = "sent" if sent else "failed"
     lead.telegram_error = None if sent else (error or "Unknown Telegram error")
+    lead.telegram_message_id = message_id
     await session.commit()
 
     if not sent:
@@ -147,8 +152,27 @@ async def update_lead_status(
     lead.status = body.status
     lead.status_updated_at = datetime.now(UTC)
     await session.commit()
-    await send_status_update_to_telegram(lead.name, lead.contact, body.status)
+
+    await _notify_status_change(lead, body.status)
     return LeadResponse(ok=True)
+
+
+async def _notify_status_change(lead: Lead, new_status: str) -> None:
+    if lead.telegram_message_id:
+        from app.schemas import LeadCreate
+        lead_payload = LeadCreate(
+            name=lead.name,
+            contact=lead.contact,
+            company=lead.company,
+            task=lead.task,
+            budget=lead.budget,
+            serviceType=lead.service_type,
+            urgency=lead.urgency,
+            privacyConsent=True,
+        )
+        await edit_lead_status_in_telegram(lead.telegram_message_id, lead_payload, str(lead.id), new_status)
+    else:
+        await send_status_fallback_to_telegram(lead.name, lead.contact, new_status)
 
 
 @router.patch("/admin/leads/{lead_id}/notes", response_model=LeadResponse)
