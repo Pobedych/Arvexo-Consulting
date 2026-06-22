@@ -123,7 +123,7 @@ jobs:
   # ── 5. CI summary ────────────────────────────────────────
   ci-summary:
     name: ✅ CI Summary
-    needs: [frontend-build, backend-lint]
+    needs: [frontend-lint, frontend-typecheck, frontend-build, backend-lint]
     runs-on: ubuntu-latest
     if: always()
     steps:
