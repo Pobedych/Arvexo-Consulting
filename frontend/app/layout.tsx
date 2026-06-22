@@ -39,20 +39,11 @@ export const metadata: Metadata = {
     url: SITE_URL,
     locale: "ru_RU",
     siteName: "Arvexo AI Consulting",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Arvexo AI Consulting",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
-    images: ["/og-image.png"],
   },
   alternates: {
     canonical: SITE_URL,

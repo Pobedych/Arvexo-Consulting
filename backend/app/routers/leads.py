@@ -10,7 +10,7 @@ from app.config import get_settings
 from app.database import get_session
 from app.models import Lead
 from app.schemas import AdminLeadItem, AdminNotesUpdate, LeadCreate, LeadListItem, LeadResponse, LeadStatusUpdate
-from app.services.telegram import send_lead_to_telegram
+from app.services.telegram import send_lead_to_telegram, send_status_update_to_telegram
 from app.utils.rate_limit import check_rate_limit
 from app.utils.security import get_client_ip
 
@@ -145,6 +145,7 @@ async def update_lead_status(
     lead.status = body.status
     lead.status_updated_at = datetime.now(UTC)
     await session.commit()
+    await send_status_update_to_telegram(lead.name, lead.contact, body.status)
     return LeadResponse(ok=True)
 
 

@@ -14,6 +14,31 @@ import {
   updateLeadStatus,
 } from "@/lib/auth";
 
+function exportToCsv(leads: AdminLeadItem[]) {
+  const URGENCY: Record<string, string> = { urgent: "Срочно", standard: "Стандартно" };
+  const STATUS: Record<string, string> = {
+    new: "Новая", contacted: "Связались", in_progress: "В работе",
+    done: "Выполнена", rejected: "Отклонена",
+  };
+  const headers = ["Дата", "Имя", "Контакт", "Компания", "Тип", "Срочность", "Бюджет", "Статус", "Задача", "Заметка"];
+  const rows = leads.map((l) => [
+    new Date(l.created_at).toLocaleDateString("ru-RU"),
+    l.name, l.contact, l.company ?? "",
+    l.service_type ?? "", URGENCY[l.urgency ?? ""] ?? "",
+    l.budget ?? "", STATUS[l.status] ?? l.status,
+    `"${l.task.replace(/"/g, '""')}"`,
+    `"${(l.admin_notes ?? "").replace(/"/g, '""')}"`,
+  ]);
+  const csv = [headers, ...rows].map((r) => r.join(";")).join("\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `leads-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 const STATUSES: { value: LeadStatus | "all"; label: string }[] = [
   { value: "all",         label: "Все" },
   { value: "new",         label: "Новые" },
@@ -85,6 +110,7 @@ export default function AdminPage() {
   const [leads, setLeads] = useState<AdminLeadItem[]>([]);
   const [pageLoading, setPageLoading] = useState(true);
   const [filter, setFilter] = useState<LeadStatus | "all">("all");
+  const [search, setSearch] = useState("");
   const [updating, setUpdating] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [notesOpen, setNotesOpen] = useState<string | null>(null);
@@ -118,7 +144,16 @@ export default function AdminPage() {
     );
   }
 
-  const visible = filter === "all" ? leads : leads.filter((l) => l.status === filter);
+  const q = search.trim().toLowerCase();
+  const searched = q
+    ? leads.filter((l) =>
+        l.name.toLowerCase().includes(q) ||
+        l.contact.toLowerCase().includes(q) ||
+        (l.company ?? "").toLowerCase().includes(q) ||
+        l.task.toLowerCase().includes(q)
+      )
+    : leads;
+  const visible = filter === "all" ? searched : searched.filter((l) => l.status === filter);
   const counts = leads.reduce<Record<string, number>>((acc, l) => {
     acc[l.status] = (acc[l.status] ?? 0) + 1;
     return acc;
@@ -133,7 +168,22 @@ export default function AdminPage() {
             <span className="text-hairline">·</span>
             <h1 className="text-sm font-semibold text-ink">Admin</h1>
           </div>
-          <span className="text-xs text-muted">{leads.length} заявок</span>
+          <div className="flex items-center gap-2">
+            <input
+              type="search"
+              placeholder="Поиск..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="h-8 rounded-card border border-hairline bg-bg px-3 text-sm text-ink placeholder:text-faint focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20 w-40 sm:w-56"
+            />
+            <button
+              type="button"
+              onClick={() => exportToCsv(leads)}
+              className="flex h-8 items-center gap-1.5 rounded-card border border-hairline bg-bg px-3 text-xs font-medium text-muted transition hover:border-hairline-md hover:text-ink"
+            >
+              ↓ CSV
+            </button>
+          </div>
         </div>
       </header>
 
