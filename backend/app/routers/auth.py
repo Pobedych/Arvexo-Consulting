@@ -51,7 +51,7 @@ async def auth_callback(
         result = await exchange_sso_code(code)
     except AccountServiceError as exc:
         logger.warning("SSO exchange failed: %s", exc)
-        redirect = RedirectResponse(url=f"{settings.frontend_url}/login?error=sso_failed", status_code=302)
+        redirect = RedirectResponse(url=f"{settings.frontend_url}/?error=sso_failed", status_code=302)
         return redirect
 
     user = result.get("account_user", {})
