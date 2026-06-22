@@ -5,17 +5,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg:          "#EEEBE3",
-        surface:     "#FBFAF7",
-        "surface-alt": "#E6E2D8",
-        ink:         "#14130F",
-        "ink-2":     "#1A1814",
-        muted:       "#57534B",
-        faint:       "#8A857B",
-        hairline:    "rgba(20,19,15,0.10)",
-        "hairline-md": "rgba(20,19,15,0.14)",
-        accent:      "#E5402C",
-        success:     "#1FB46A",
+        // CSS-variable-based colors — respond to dark mode via :root overrides in globals.css
+        bg:            "var(--bg)",
+        surface:       "var(--surface)",
+        "surface-alt": "var(--surface-alt)",
+        ink:           "var(--ink)",
+        "ink-2":       "var(--ink-2)",
+        muted:         "var(--text-muted)",
+        faint:         "var(--text-faint)",
+        hairline:      "var(--hairline)",
+        "hairline-md": "var(--hairline-md)",
+        // Accent/success keep full rgb() form so opacity modifiers like /8 work
+        accent:        "rgb(229 64 44 / <alpha-value>)",
+        success:       "rgb(31 180 106 / <alpha-value>)",
       },
       fontFamily: {
         onest:     ["var(--font-onest)", "ui-sans-serif", "system-ui", "sans-serif"],

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant, JetBrains_Mono, Onest } from "next/font/google";
+import Script from "next/script";
 import { AuthProvider } from "@/components/AuthProvider";
 import "./globals.css";
 
@@ -60,6 +61,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <AuthProvider>
           {children}
         </AuthProvider>
+        {process.env.NODE_ENV === "production" && (
+          <Script
+            defer
+            data-domain="ai.arvexo.ru"
+            src="https://plausible.io/js/script.js"
+          />
+        )}
       </body>
     </html>
   );

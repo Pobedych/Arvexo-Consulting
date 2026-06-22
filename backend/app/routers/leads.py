@@ -11,7 +11,7 @@ from app.database import get_session
 from app.models import Lead
 from app.schemas import AdminLeadItem, AdminNotesUpdate, LeadCreate, LeadListItem, LeadResponse, LeadStatusUpdate
 from app.services.telegram import send_lead_to_telegram, send_status_update_to_telegram
-from app.utils.rate_limit import check_rate_limit
+from app.utils.rate_limit import check_admin_rate_limit, check_rate_limit
 from app.utils.security import get_client_ip
 
 logger = logging.getLogger(__name__)
@@ -132,10 +132,12 @@ async def get_my_leads(
 async def update_lead_status(
     lead_id: str,
     body: LeadStatusUpdate,
+    request: Request,
     consulting_session: str | None = Cookie(default=None),
     session: AsyncSession = Depends(get_session),
 ) -> LeadResponse:
     _require_admin(_get_account_id_from_cookie(consulting_session))
+    check_admin_rate_limit(request)
 
     result = await session.execute(select(Lead).where(Lead.id == lead_id))
     lead = result.scalar_one_or_none()
@@ -153,10 +155,12 @@ async def update_lead_status(
 async def update_lead_notes(
     lead_id: str,
     body: AdminNotesUpdate,
+    request: Request,
     consulting_session: str | None = Cookie(default=None),
     session: AsyncSession = Depends(get_session),
 ) -> LeadResponse:
     _require_admin(_get_account_id_from_cookie(consulting_session))
+    check_admin_rate_limit(request)
 
     result = await session.execute(select(Lead).where(Lead.id == lead_id))
     lead = result.scalar_one_or_none()

@@ -6,6 +6,7 @@ import { FAQSection } from "@/components/FAQSection";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
+import { PriceCalculator } from "@/components/PriceCalculator";
 import { ProblemSection } from "@/components/ProblemSection";
 import { ProcessSection } from "@/components/ProcessSection";
 import { ServicesSection } from "@/components/ServicesSection";
@@ -75,6 +76,7 @@ export default function Home() {
         <AudienceSection />
         <AuditOutputSection />
         <WhyArvexoSection />
+        <PriceCalculator />
         <FAQSection />
         <ContactSection />
       </main>

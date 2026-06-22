@@ -162,24 +162,24 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-bg">
       <header className="sticky top-0 z-10 border-b border-hairline bg-surface/90 backdrop-blur-xl">
-        <div className="section-shell flex h-[var(--header-height)] items-center justify-between gap-4">
+        <div className="section-shell flex min-h-[var(--header-height)] flex-wrap items-center justify-between gap-3 py-3">
           <div className="flex items-center gap-3">
             <Link href="/" className="text-sm text-muted hover:text-ink">← Arvexo AI</Link>
             <span className="text-hairline">·</span>
             <h1 className="text-sm font-semibold text-ink">Admin</h1>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-1 items-center justify-end gap-2">
             <input
               type="search"
               placeholder="Поиск..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-8 rounded-card border border-hairline bg-bg px-3 text-sm text-ink placeholder:text-faint focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20 w-40 sm:w-56"
+              className="h-8 min-w-0 flex-1 rounded-card border border-hairline bg-bg px-3 text-sm text-ink placeholder:text-faint focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20 sm:max-w-56"
             />
             <button
               type="button"
               onClick={() => exportToCsv(leads)}
-              className="flex h-8 items-center gap-1.5 rounded-card border border-hairline bg-bg px-3 text-xs font-medium text-muted transition hover:border-hairline-md hover:text-ink"
+              className="flex h-8 shrink-0 items-center gap-1.5 rounded-card border border-hairline bg-bg px-3 text-xs font-medium text-muted transition hover:border-hairline-md hover:text-ink"
             >
               ↓ CSV
             </button>
@@ -205,25 +205,27 @@ export default function AdminPage() {
           ))}
         </div>
 
-        {/* Filter tabs */}
-        <div className="mb-5 flex flex-wrap gap-1">
-          {STATUSES.map(({ value, label }) => (
-            <button
-              key={value}
-              type="button"
-              onClick={() => setFilter(value)}
-              className={`rounded-pill px-3 py-1.5 text-xs font-medium transition ${
-                filter === value
-                  ? "bg-ink text-bg"
-                  : "border border-hairline bg-surface text-muted hover:text-ink"
-              }`}
-            >
-              {label}
-              {value !== "all" && (counts[value] ?? 0) > 0 && (
-                <span className="ml-1.5 opacity-60">{counts[value]}</span>
-              )}
-            </button>
-          ))}
+        {/* Filter tabs — horizontal scroll on mobile */}
+        <div className="mb-5 -mx-5 sm:mx-0">
+          <div className="flex gap-1.5 overflow-x-auto px-5 pb-1 sm:flex-wrap sm:px-0 sm:pb-0 scrollbar-none">
+            {STATUSES.map(({ value, label }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setFilter(value)}
+                className={`shrink-0 rounded-pill px-3 py-1.5 text-xs font-medium transition ${
+                  filter === value
+                    ? "bg-ink text-bg"
+                    : "border border-hairline bg-surface text-muted hover:text-ink"
+                }`}
+              >
+                {label}
+                {value !== "all" && (counts[value] ?? 0) > 0 && (
+                  <span className="ml-1.5 opacity-60">{counts[value]}</span>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Leads */}
