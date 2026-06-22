@@ -36,14 +36,14 @@ services:
       context: ./frontend
       args:
         NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
-        NEXT_PUBLIC_ACCOUNT_SSO_URL: ${NEXT_PUBLIC_ACCOUNT_SSO_URL:-https://account.arvexo.ru}
+        NEXT_PUBLIC_ACCOUNT_SSO_URL: ${NEXT_PUBLIC_ACCOUNT_SSO_URL:-https://api.account.arvexo.ru}
         NEXT_PUBLIC_ACCOUNT_CLIENT_ID: ${NEXT_PUBLIC_ACCOUNT_CLIENT_ID:-arvexo-consulting}
         NEXT_PUBLIC_ACCOUNT_REDIRECT_URI: ${NEXT_PUBLIC_ACCOUNT_REDIRECT_URI:-https://ai.arvexo.ru/api/auth/callback}
     restart: unless-stopped
     env_file: .env
     environment:
       NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
-      NEXT_PUBLIC_ACCOUNT_SSO_URL: ${NEXT_PUBLIC_ACCOUNT_SSO_URL:-https://account.arvexo.ru}
+      NEXT_PUBLIC_ACCOUNT_SSO_URL: ${NEXT_PUBLIC_ACCOUNT_SSO_URL:-https://api.account.arvexo.ru}
       NEXT_PUBLIC_ACCOUNT_CLIENT_ID: ${NEXT_PUBLIC_ACCOUNT_CLIENT_ID:-arvexo-consulting}
       NEXT_PUBLIC_ACCOUNT_REDIRECT_URI: ${NEXT_PUBLIC_ACCOUNT_REDIRECT_URI:-https://ai.arvexo.ru/api/auth/callback}
     ports:

@@ -47,10 +47,13 @@ export async function getMyLeads(): Promise<LeadListItem[]> {
 }
 
 export function buildSSOLoginUrl(): string {
-  const accountUrl = process.env.NEXT_PUBLIC_ACCOUNT_SSO_URL ?? "https://account.arvexo.ru";
+  // NEXT_PUBLIC_ACCOUNT_SSO_URL must include the API base path:
+  // prod:  https://api.account.arvexo.ru
+  // local: http://localhost:9100/api
+  const accountApiBase = (process.env.NEXT_PUBLIC_ACCOUNT_SSO_URL ?? "https://api.account.arvexo.ru").replace(/\/$/, "");
   const clientId = process.env.NEXT_PUBLIC_ACCOUNT_CLIENT_ID ?? "arvexo-consulting";
   const redirectUri = process.env.NEXT_PUBLIC_ACCOUNT_REDIRECT_URI ?? "https://ai.arvexo.ru/api/auth/callback";
   const state = Math.random().toString(36).slice(2);
   const params = new URLSearchParams({ client_id: clientId, redirect_uri: redirectUri, state });
-  return `${accountUrl}/sso/start?${params.toString()}`;
+  return `${accountApiBase}/sso/start?${params.toString()}`;
 }
