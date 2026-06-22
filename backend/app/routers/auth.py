@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import jwt
 from fastapi import APIRouter, Cookie, HTTPException, Query
@@ -14,7 +14,7 @@ settings = get_settings()
 
 
 def _create_session_token(user: dict) -> str:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     payload = {
         "sub": user["id"],
         "email": user.get("email"),
@@ -70,10 +70,10 @@ async def auth_me(
         raise HTTPException(status_code=401, detail="Not authenticated")
     try:
         payload = _decode_session_token(token)
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Session expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid session")
+    except jwt.ExpiredSignatureError as exc:
+        raise HTTPException(status_code=401, detail="Session expired") from exc
+    except jwt.InvalidTokenError as exc:
+        raise HTTPException(status_code=401, detail="Invalid session") from exc
     return JSONResponse({
         "id": payload.get("sub"),
         "email": payload.get("email"),
